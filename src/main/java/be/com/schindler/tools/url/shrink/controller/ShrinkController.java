@@ -21,8 +21,8 @@ import java.net.URI;
 public class ShrinkController {
   private final ShrinkService service;
 
-  @GetMapping("/go/{id}")
-  public Mono<Void> go(ServerHttpResponse response, @PathVariable("id") String id) {
+  @RequestMapping("/{id}")
+  public Mono<Void> redirect(ServerHttpResponse response, @PathVariable("id") String id) {
     response.setStatusCode(HttpStatus.NOT_FOUND);
     return service
         .find(id)
@@ -36,7 +36,6 @@ public class ShrinkController {
   }
 
   @PostMapping(
-      path = "/url",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public Mono<UrlLink> create(ServerHttpRequest client, @RequestBody Request request) {
@@ -44,12 +43,8 @@ public class ShrinkController {
         .create(request)
         .map(
             urlLink -> {
-              urlLink.setHash(
-                  UriComponentsBuilder.newInstance()
-                      .port(client.getURI().getPort())
-                      .scheme(client.getURI().getScheme())
-                      .host(client.getURI().getHost())
-                      .path("/go")
+              urlLink.setLink(
+                  UriComponentsBuilder.fromUri(client.getURI())
                       .pathSegment(urlLink.getHash())
                       .build()
                       .toUriString());

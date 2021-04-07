@@ -3,6 +3,7 @@ package be.com.schindler.tools.url.shrink.controller;
 import be.com.schindler.tools.url.shrink.domain.Request;
 import be.com.schindler.tools.url.shrink.domain.UrlLink;
 import be.com.schindler.tools.url.shrink.service.ShrinkService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,6 +19,7 @@ import reactor.core.publisher.Mono;
 import java.time.OffsetDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -44,7 +46,7 @@ class ShrinkControllerTest {
     var request = Request.builder().url(url).build();
     webClient
         .post()
-        .uri("/url")
+        .uri("/")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(request)
         .exchange()
@@ -52,6 +54,8 @@ class ShrinkControllerTest {
         .is2xxSuccessful()
         .expectBody()
         .jsonPath("$.url")
-        .exists();
+        .value(Matchers.is("test"))
+        .jsonPath("$.link")
+        .value(Matchers.is("/123"));
   }
 }

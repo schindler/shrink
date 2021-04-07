@@ -11,6 +11,7 @@ import java.time.OffsetDateTime;
 @ToString
 public class UrlLink {
   private String url;
-  @Setter private String hash;
+  private String hash;
+  @Setter private String link;
   private OffsetDateTime expiration;
 }
