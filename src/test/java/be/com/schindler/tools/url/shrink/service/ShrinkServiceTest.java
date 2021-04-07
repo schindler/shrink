@@ -29,6 +29,5 @@ public class ShrinkServiceTest {
     request = Request.builder().url(url2).build();
     add = StepVerifier.create(service.create(request).log());
     add.expectNextMatches(urlLink -> !urlLink.getHash().equals("M540425984")).verifyComplete();
-    Mono.delay(Duration.ofMinutes(20)).block();
   }
 }
