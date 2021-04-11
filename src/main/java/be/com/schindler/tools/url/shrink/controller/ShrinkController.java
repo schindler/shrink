@@ -3,6 +3,7 @@ package be.com.schindler.tools.url.shrink.controller;
 import be.com.schindler.tools.url.shrink.domain.Request;
 import be.com.schindler.tools.url.shrink.domain.UrlLink;
 import be.com.schindler.tools.url.shrink.service.ShrinkService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 public class ShrinkController {
-  private final ShrinkService service;
+  @NonNull private final ShrinkService service;
 
   @RequestMapping("/{id}")
   public Mono<Void> redirect(ServerHttpResponse response, @PathVariable("id") String id) {

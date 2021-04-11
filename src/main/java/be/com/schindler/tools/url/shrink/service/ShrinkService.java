@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface ShrinkService {
     Mono<UrlLink> create(Request request);
-    Mono<UrlLink> find(String hash);
+    Mono<UrlLink> find(String id);
 }

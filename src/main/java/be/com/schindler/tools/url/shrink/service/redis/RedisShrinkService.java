@@ -3,26 +3,25 @@ package be.com.schindler.tools.url.shrink.service.redis;
 import be.com.schindler.tools.url.shrink.domain.Request;
 import be.com.schindler.tools.url.shrink.domain.UrlLink;
 import be.com.schindler.tools.url.shrink.service.ShrinkService;
+import be.com.schindler.tools.url.shrink.service.UrlLinkSupplierService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.function.Function;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RedisShrinkService implements ShrinkService {
-  private final ReactiveRedisOperations<String, UrlLink> service;
-  private final Function<Request, Flux<UrlLink>> supplier;
+  @NonNull private final ReactiveRedisOperations<String, UrlLink> service;
+  @NonNull private final UrlLinkSupplierService supplier;
 
   @Override
   public Mono<UrlLink> create(Request request) {
     return supplier
-        .apply(request)
+        .get(request)
         .limitRequest(10)
         .concatMap(this::addNew)
         .next()
