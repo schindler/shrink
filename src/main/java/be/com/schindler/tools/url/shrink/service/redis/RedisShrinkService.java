@@ -47,7 +47,7 @@ public class RedisShrinkService implements ShrinkService {
     log.info("setTTL {}", urlLink);
     return service
         .expireAt(urlLink.getHash(), urlLink.getExpiration().toInstant())
-        .filter(aBoolean -> aBoolean)
+        .filter(Boolean::booleanValue)
         .thenReturn(urlLink);
   }
 }
